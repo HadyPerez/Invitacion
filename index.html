@@ -39,8 +39,9 @@
     color:var(--sand);
     padding:2rem 1.5rem 6rem;
   }
-  .hero::before{ /* sun */
-    content:"";
+  /* Sun (real DOM node so it can carry independent parallax + pulse) */
+  .sun-wrap{ position:absolute; inset:0; z-index:0; pointer-events:none; will-change:transform; }
+  .sun{
     position:absolute;
     top:14%;
     left:50%;
@@ -51,7 +52,6 @@
     background: radial-gradient(circle at 40% 35%, #FFE9B0, var(--gold) 55%, #F2934D 78%);
     box-shadow: 0 0 120px 40px rgba(244,185,66,0.35);
     opacity:.9;
-    z-index:0;
     animation: sunPulse 7s ease-in-out infinite;
   }
   @keyframes sunPulse{
@@ -59,8 +59,8 @@
     50%{ transform:translateX(-50%) scale(1.045); box-shadow:0 0 155px 55px rgba(244,185,66,.48); }
   }
 
-  /* Clouds drifting across the sky */
-  .clouds{ position:absolute; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+  /* Clouds drifting across the sky, whole group carries parallax */
+  .clouds{ position:absolute; inset:0; z-index:1; pointer-events:none; overflow:hidden; will-change:transform; }
   .cloud{ position:absolute; background:rgba(253,246,236,.6); border-radius:100px; filter:blur(.5px); }
   .cloud::before, .cloud::after{ content:""; position:absolute; background:inherit; border-radius:50%; }
   .cloud-1{ width:130px; height:38px; top:10%; left:-180px; animation: driftCloud 42s linear infinite; }
@@ -77,40 +77,29 @@
     to{ transform:translateX(calc(100vw + 320px)); }
   }
 
-  /* Layered scrolling ocean at the base of the hero */
-  .ocean{ position:absolute; left:0; right:0; bottom:-2px; height:150px; z-index:1; overflow:hidden; }
-  .wave-layer{
-    position:absolute; left:0; bottom:0; width:100%;
-    background-repeat:repeat-x;
-    background-size:600px 100%;
-    animation: waveScroll linear infinite;
+  /* Interactive canvas ocean: real sine-wave motion, light glints, tap-to-ripple */
+  .ocean-canvas{
+    position:absolute; left:0; right:0; bottom:-2px; width:100%; height:190px;
+    z-index:1; display:block; cursor:pointer; touch-action:manipulation;
   }
-  .wave-back{
-    height:130px; opacity:.3; animation-duration:28s;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 100'%3E%3Cpath d='M0,50 C75,80 150,20 300,50 C450,80 525,20 600,50 L600,100 L0,100 Z' fill='%23F4B942'/%3E%3C/svg%3E");
-  }
-  .wave-mid{
-    height:110px; opacity:.55; animation-duration:17s; animation-direction:reverse;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 100'%3E%3Cpath d='M0,55 C75,25 150,85 300,55 C450,25 525,85 600,55 L600,100 L0,100 Z' fill='%23FDF6EC'/%3E%3C/svg%3E");
-  }
-  .wave-front{
-    height:90px; opacity:1; animation-duration:11s;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 100'%3E%3Cpath d='M0,50 C75,80 150,20 300,50 C450,80 525,20 600,50 L600,100 L0,100 Z' fill='%23FDF6EC'/%3E%3C/svg%3E");
-  }
-  @keyframes waveScroll{
-    from{ background-position-x:0; }
-    to{ background-position-x:-600px; }
+  .ocean-hint{
+    position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+    z-index:2; font-size:.72rem; font-weight:700; letter-spacing:.05em;
+    color:var(--ocean-deep); opacity:.6; pointer-events:none;
+    text-transform:uppercase;
   }
 
-  /* Swaying palm fronds framing the hero */
-  .palm{ position:absolute; bottom:-10px; z-index:2; width:140px; height:200px; opacity:.92; transform-origin:bottom center; }
-  .palm-left{ left:-20px; animation: sway 5.5s ease-in-out infinite; }
-  .palm-right{ right:-20px; transform:scaleX(-1); animation: sway 6.5s ease-in-out infinite reverse; }
+  /* Swaying palm fronds framing the hero, each wrap carries parallax */
+  .palm-wrap{ position:absolute; bottom:0; z-index:2; pointer-events:none; will-change:transform; }
+  .palm-wrap-left{ left:-20px; }
+  .palm-wrap-right{ right:-20px; }
+  .palm{ position:absolute; bottom:-10px; width:140px; height:200px; opacity:.92; transform-origin:bottom center; }
+  .palm-left{ left:0; animation: sway 5.5s ease-in-out infinite; }
+  .palm-right{ right:0; transform:scaleX(-1); animation: swayRight 6.5s ease-in-out infinite; }
   @keyframes sway{
     0%,100%{ transform:rotate(-3deg); }
     50%{ transform:rotate(3deg); }
   }
-  .palm-right{ animation-name: swayRight; }
   @keyframes swayRight{
     0%,100%{ transform:scaleX(-1) rotate(-3deg); }
     50%{ transform:scaleX(-1) rotate(3deg); }
@@ -341,27 +330,31 @@
 
   @media (prefers-reduced-motion: reduce){
     html{ scroll-behavior:auto; }
-    .hero::before, .cloud, .wave-layer, .palm{ animation:none !important; }
+    .sun, .cloud, .palm{ animation:none !important; }
   }
 </style>
 </head>
 <body>
 
-<header class="hero">
-  <div class="clouds" aria-hidden="true">
+<header class="hero" id="heroBeach">
+  <div class="sun-wrap" id="sunWrap"><div class="sun"></div></div>
+
+  <div class="clouds" id="cloudsWrap" aria-hidden="true">
     <div class="cloud cloud-1"></div>
     <div class="cloud cloud-2"></div>
     <div class="cloud cloud-3"></div>
   </div>
 
-  <svg class="palm palm-left" viewBox="0 0 140 200" aria-hidden="true">
-    <path d="M70,200 C68,140 66,90 70,55" stroke="#0C2B33" stroke-width="6" fill="none" opacity=".5"/>
-    <path d="M70,60 C40,40 10,30 -10,15 C25,20 55,32 70,60 Z" fill="#1F5A45"/>
-    <path d="M70,60 C90,30 115,15 140,0 C110,12 85,28 70,60 Z" fill="#1F5A45"/>
-    <path d="M70,55 C50,20 30,-5 5,-25 C40,-12 62,15 70,55 Z" fill="#2C6E5C"/>
-    <path d="M70,55 C95,15 120,-10 150,-25 C112,-14 85,10 70,55 Z" fill="#2C6E5C"/>
-    <path d="M70,55 C68,15 68,-15 75,-40 C80,-12 78,20 70,55 Z" fill="#256052"/>
-  </svg>
+  <div class="palm-wrap palm-wrap-left" id="palmWrapLeft">
+    <svg class="palm palm-left" viewBox="0 0 140 200" aria-hidden="true">
+      <path d="M70,200 C68,140 66,90 70,55" stroke="#0C2B33" stroke-width="6" fill="none" opacity=".5"/>
+      <path d="M70,60 C40,40 10,30 -10,15 C25,20 55,32 70,60 Z" fill="#1F5A45"/>
+      <path d="M70,60 C90,30 115,15 140,0 C110,12 85,28 70,60 Z" fill="#1F5A45"/>
+      <path d="M70,55 C50,20 30,-5 5,-25 C40,-12 62,15 70,55 Z" fill="#2C6E5C"/>
+      <path d="M70,55 C95,15 120,-10 150,-25 C112,-14 85,10 70,55 Z" fill="#2C6E5C"/>
+      <path d="M70,55 C68,15 68,-15 75,-40 C80,-12 78,20 70,55 Z" fill="#256052"/>
+    </svg>
+  </div>
 
   <div class="hero-content">
     <div class="eyebrow">Celebración especial</div>
@@ -375,20 +368,19 @@
     </div>
   </div>
 
-  <svg class="palm palm-right" viewBox="0 0 140 200" aria-hidden="true">
-    <path d="M70,200 C68,140 66,90 70,55" stroke="#0C2B33" stroke-width="6" fill="none" opacity=".5"/>
-    <path d="M70,60 C40,40 10,30 -10,15 C25,20 55,32 70,60 Z" fill="#1F5A45"/>
-    <path d="M70,60 C90,30 115,15 140,0 C110,12 85,28 70,60 Z" fill="#1F5A45"/>
-    <path d="M70,55 C50,20 30,-5 5,-25 C40,-12 62,15 70,55 Z" fill="#2C6E5C"/>
-    <path d="M70,55 C95,15 120,-10 150,-25 C112,-14 85,10 70,55 Z" fill="#2C6E5C"/>
-    <path d="M70,55 C68,15 68,-15 75,-40 C80,-12 78,20 70,55 Z" fill="#256052"/>
-  </svg>
-
-  <div class="ocean" aria-hidden="true">
-    <div class="wave-layer wave-back"></div>
-    <div class="wave-layer wave-mid"></div>
-    <div class="wave-layer wave-front"></div>
+  <div class="palm-wrap palm-wrap-right" id="palmWrapRight">
+    <svg class="palm palm-right" viewBox="0 0 140 200" aria-hidden="true">
+      <path d="M70,200 C68,140 66,90 70,55" stroke="#0C2B33" stroke-width="6" fill="none" opacity=".5"/>
+      <path d="M70,60 C40,40 10,30 -10,15 C25,20 55,32 70,60 Z" fill="#1F5A45"/>
+      <path d="M70,60 C90,30 115,15 140,0 C110,12 85,28 70,60 Z" fill="#1F5A45"/>
+      <path d="M70,55 C50,20 30,-5 5,-25 C40,-12 62,15 70,55 Z" fill="#2C6E5C"/>
+      <path d="M70,55 C95,15 120,-10 150,-25 C112,-14 85,10 70,55 Z" fill="#2C6E5C"/>
+      <path d="M70,55 C68,15 68,-15 75,-40 C80,-12 78,20 70,55 Z" fill="#256052"/>
+    </svg>
   </div>
+
+  <canvas class="ocean-canvas" id="oceanCanvas" aria-hidden="true"></canvas>
+  <div class="ocean-hint">Toca el agua ✨</div>
 </header>
 
 <section id="detalles">
@@ -537,6 +529,137 @@
   <div class="display">Con cariño, te esperamos</div>
   <div>21 – 23 de agosto · Playa Escondida Resort</div>
 </footer>
+
+<script>
+  /* ---------- Escena de playa interactiva ---------- */
+  (function(){
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hero = document.getElementById('heroBeach');
+    const sunWrap = document.getElementById('sunWrap');
+    const cloudsWrap = document.getElementById('cloudsWrap');
+    const palmL = document.getElementById('palmWrapLeft');
+    const palmR = document.getElementById('palmWrapRight');
+    const canvas = document.getElementById('oceanCanvas');
+    const ctx = canvas.getContext('2d');
+
+    /* --- Parallax: sun/clouds/palms drift gently toward pointer --- */
+    let targetX = 0, targetY = 0, curX = 0, curY = 0;
+    function setTarget(clientX, clientY){
+      const r = hero.getBoundingClientRect();
+      targetX = ((clientX - r.left) / r.width - 0.5) * 2;   // -1..1
+      targetY = ((clientY - r.top) / r.height - 0.5) * 2;   // -1..1
+    }
+    hero.addEventListener('mousemove', e => setTarget(e.clientX, e.clientY));
+    hero.addEventListener('touchmove', e => {
+      if(e.touches[0]) setTarget(e.touches[0].clientX, e.touches[0].clientY);
+    }, {passive:true});
+    hero.addEventListener('mouseleave', () => { targetX = 0; targetY = 0; });
+
+    function applyParallax(){
+      curX += (targetX - curX) * 0.06;
+      curY += (targetY - curY) * 0.06;
+      sunWrap.style.transform    = `translate(${curX*10}px, ${curY*6}px)`;
+      cloudsWrap.style.transform = `translate(${curX*22}px, ${curY*10}px)`;
+      palmL.style.transform      = `translate(${curX*-14}px, ${curY*-6}px) rotate(${curX*-1.2}deg)`;
+      palmR.style.transform      = `translate(${curX*-14}px, ${curY*-6}px) rotate(${curX*1.2}deg)`;
+    }
+
+    /* --- Canvas ocean: layered sine waves + light glints + tap ripples --- */
+    let W, H, DPR = Math.min(window.devicePixelRatio || 1, 2);
+    function resize(){
+      const r = canvas.getBoundingClientRect();
+      W = r.width; H = r.height;
+      canvas.width = W * DPR; canvas.height = H * DPR;
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const sparkles = Array.from({length:26}, () => ({
+      x: Math.random(), y: 0.25 + Math.random()*0.55, phase: Math.random()*Math.PI*2, speed: 0.6+Math.random()*1.2
+    }));
+    let ripples = [];
+
+    function addRipple(x, y){
+      ripples.push({x, y, r:2, alpha:0.55});
+      if(ripples.length > 10) ripples.shift();
+    }
+    canvas.addEventListener('click', e => {
+      const r = canvas.getBoundingClientRect();
+      addRipple(e.clientX - r.left, e.clientY - r.top);
+    });
+    canvas.addEventListener('touchstart', e => {
+      const r = canvas.getBoundingClientRect();
+      const t = e.touches[0];
+      if(t) addRipple(t.clientX - r.left, t.clientY - r.top);
+    }, {passive:true});
+
+    function waveY(x, t, amp, freq, speed, offset){
+      return offset + Math.sin(x*freq + t*speed) * amp;
+    }
+
+    function drawLayer(t, baseY, amp, freq, speed, color, alpha){
+      ctx.beginPath();
+      ctx.moveTo(0, H);
+      for(let x = 0; x <= W; x += 6){
+        ctx.lineTo(x, waveY(x, t, amp, freq, speed, baseY));
+      }
+      ctx.lineTo(W, H);
+      ctx.closePath();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    let start = performance.now();
+    function frame(now){
+      const t = (now - start) / 1000;
+      ctx.clearRect(0,0,W,H);
+
+      drawLayer(t, H*0.28, 8, 0.018, 1.1, '#F4B942', 0.28);
+      drawLayer(t, H*0.42, 10, 0.024, -1.5, '#FDF6EC', 0.5);
+      drawLayer(t, H*0.62, 12, 0.02, 1.8, '#FDF6EC', 1);
+
+      /* light glints on the water */
+      sparkles.forEach(s => {
+        const x = s.x * W;
+        const y = waveY(x, t, 10, 0.024, -1.5, H*0.42) - 6 + Math.sin(t*s.speed + s.phase) * 4;
+        const tw = (Math.sin(t*s.speed*2 + s.phase) + 1) / 2;
+        if(y < H*0.6){
+          ctx.globalAlpha = 0.15 + tw*0.35;
+          ctx.fillStyle = '#FFF6DE';
+          ctx.beginPath();
+          ctx.arc(x, y, 1.4 + tw*1.6, 0, Math.PI*2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+      });
+
+      /* tap ripples */
+      ripples.forEach(rp => {
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(7,59,76,${rp.alpha})`;
+        ctx.lineWidth = 2;
+        ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI*2);
+        ctx.stroke();
+        rp.r += 2.6;
+        rp.alpha *= 0.94;
+      });
+      ripples = ripples.filter(rp => rp.alpha > 0.03);
+
+      applyParallax();
+
+      if(!reduceMotion) requestAnimationFrame(frame);
+    }
+
+    if(reduceMotion){
+      frame(performance.now());
+    } else {
+      requestAnimationFrame(frame);
+    }
+  })();
+</script>
 
 <script>
   const asistenciaRadios = document.querySelectorAll('input[name="asistencia"]');
