@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>95 Años — Playa Escondida Resort</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ocean-deep:#073B4C;
+    --ocean-mid:#0F7EA3;
+    --coral:#FF6F59;
+    --gold:#F4B942;
+    --sand:#FDF6EC;
+    --ink:#0C2B33;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Manrope', sans-serif;
+    background:var(--sand);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3, .display{ font-family:'Fraunces', serif; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    overflow:hidden;
+    background: linear-gradient(180deg, var(--ocean-deep) 0%, var(--ocean-mid) 45%, #F2934D 78%, var(--gold) 100%);
+    color:var(--sand);
+    padding:2rem 1.5rem 6rem;
+  }
+  .hero::before{ /* sun */
+    content:"";
+    position:absolute;
+    top:14%;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(60vw,420px);
+    height:min(60vw,420px);
+    border-radius:50%;
+    background: radial-gradient(circle at 40% 35%, #FFE9B0, var(--gold) 55%, #F2934D 78%);
+    box-shadow: 0 0 120px 40px rgba(244,185,66,0.35);
+    opacity:.9;
+    z-index:0;
+    animation: sunPulse 7s ease-in-out infinite;
+  }
+  @keyframes sunPulse{
+    0%,100%{ transform:translateX(-50%) scale(1); box-shadow:0 0 120px 40px rgba(244,185,66,.35); }
+    50%{ transform:translateX(-50%) scale(1.045); box-shadow:0 0 155px 55px rgba(244,185,66,.48); }
+  }
+
+  /* Clouds drifting across the sky */
+  .clouds{ position:absolute; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+  .cloud{ position:absolute; background:rgba(253,246,236,.6); border-radius:100px; filter:blur(.5px); }
+  .cloud::before, .cloud::after{ content:""; position:absolute; background:inherit; border-radius:50%; }
+  .cloud-1{ width:130px; height:38px; top:10%; left:-180px; animation: driftCloud 42s linear infinite; }
+  .cloud-1::before{ width:64px; height:64px; top:-30px; left:16px; }
+  .cloud-1::after{ width:46px; height:46px; top:-18px; left:66px; }
+  .cloud-2{ width:96px; height:28px; top:24%; left:-150px; opacity:.75; animation: driftCloud 58s linear infinite; animation-delay:-20s; }
+  .cloud-2::before{ width:46px; height:46px; top:-20px; left:10px; }
+  .cloud-2::after{ width:34px; height:34px; top:-13px; left:46px; }
+  .cloud-3{ width:74px; height:22px; top:6%; left:-120px; opacity:.65; animation: driftCloud 33s linear infinite; animation-delay:-11s; }
+  .cloud-3::before{ width:36px; height:36px; top:-17px; left:8px; }
+  .cloud-3::after{ width:26px; height:26px; top:-10px; left:36px; }
+  @keyframes driftCloud{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(calc(100vw + 320px)); }
+  }
+
+  /* Layered scrolling ocean at the base of the hero */
+  .ocean{ position:absolute; left:0; right:0; bottom:-2px; height:150px; z-index:1; overflow:hidden; }
+  .wave-layer{
+    position:absolute; left:0; bottom:0; width:100%;
+    background-repeat:repeat-x;
+    background-size:600px 100%;
+    animation: waveScroll linear infinite;
+  }
+  .wave-back{
+    height:130px; opacity:.3; animation-duration:28s;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 100'%3E%3Cpath d='M0,50 C75,80 150,20 300,50 C450,80 525,20 600,50 L600,100 L0,100 Z' fill='%23F4B942'/%3E%3C/svg%3E");
+  }
+  .wave-mid{
+    height:110px; opacity:.55; animation-duration:17s; animation-direction:reverse;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 100'%3E%3Cpath d='M0,55 C75,25 150,85 300,55 C450,25 525,85 600,55 L600,100 L0,100 Z' fill='%23FDF6EC'/%3E%3C/svg%3E");
+  }
+  .wave-front{
+    height:90px; opacity:1; animation-duration:11s;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 100'%3E%3Cpath d='M0,50 C75,80 150,20 300,50 C450,80 525,20 600,50 L600,100 L0,100 Z' fill='%23FDF6EC'/%3E%3C/svg%3E");
+  }
+  @keyframes waveScroll{
+    from{ background-position-x:0; }
+    to{ background-position-x:-600px; }
+  }
+
+  /* Swaying palm fronds framing the hero */
+  .palm{ position:absolute; bottom:-10px; z-index:2; width:140px; height:200px; opacity:.92; transform-origin:bottom center; }
+  .palm-left{ left:-20px; animation: sway 5.5s ease-in-out infinite; }
+  .palm-right{ right:-20px; transform:scaleX(-1); animation: sway 6.5s ease-in-out infinite reverse; }
+  @keyframes sway{
+    0%,100%{ transform:rotate(-3deg); }
+    50%{ transform:rotate(3deg); }
+  }
+  .palm-right{ animation-name: swayRight; }
+  @keyframes swayRight{
+    0%,100%{ transform:scaleX(-1) rotate(-3deg); }
+    50%{ transform:scaleX(-1) rotate(3deg); }
+  }
+
+  .hero-content{ position:relative; z-index:3; }
+  .eyebrow{
+    letter-spacing:.35em;
+    text-transform:uppercase;
+    font-size:.7rem;
+    font-weight:700;
+    opacity:.85;
+    margin-bottom:1.2rem;
+  }
+  .big-number{
+    font-size:clamp(6rem, 24vw, 13rem);
+    line-height:.85;
+    font-weight:600;
+    font-variation-settings:"opsz" 144;
+    letter-spacing:-.02em;
+    text-shadow: 0 6px 40px rgba(7,59,76,.35);
+  }
+  .hero h1{
+    font-size:clamp(1.8rem, 5vw, 2.8rem);
+    font-weight:600;
+    margin-top:.6rem;
+    text-shadow: 0 2px 20px rgba(7,59,76,.4);
+  }
+  .hero-sub{
+    margin-top:1rem;
+    font-size:1.05rem;
+    font-weight:500;
+    opacity:.95;
+  }
+  .hero-meta{
+    margin-top:2.2rem;
+    display:flex;
+    gap:1.2rem;
+    flex-wrap:wrap;
+    justify-content:center;
+    font-size:.9rem;
+    font-weight:600;
+  }
+  .pill{
+    background:rgba(253,246,236,.16);
+    border:1px solid rgba(253,246,236,.4);
+    backdrop-filter:blur(6px);
+    padding:.55rem 1.1rem;
+    border-radius:100px;
+  }
+  /* ---------- SECTIONS ---------- */
+  section{ padding:5rem 1.5rem; max-width:900px; margin:0 auto; }
+  .section-label{
+    text-transform:uppercase;
+    letter-spacing:.3em;
+    font-size:.72rem;
+    font-weight:700;
+    color:var(--coral);
+    margin-bottom:.7rem;
+    text-align:center;
+  }
+  .section-title{
+    text-align:center;
+    font-size:clamp(1.6rem,4vw,2.3rem);
+    font-weight:600;
+    color:var(--ocean-deep);
+    margin-bottom:2.5rem;
+  }
+
+  .details-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:1.2rem;
+  }
+  .detail-card{
+    background:#fff;
+    border-radius:18px;
+    padding:1.8rem 1.5rem;
+    border:1px solid #EFE3CE;
+    box-shadow:0 10px 30px -18px rgba(7,59,76,.35);
+    text-align:center;
+  }
+  .detail-card .icon{ font-size:1.8rem; margin-bottom:.6rem; display:block; }
+  .detail-card h3{
+    font-size:1rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--coral);
+    margin-bottom:.4rem;
+  }
+  .detail-card p{ font-size:1rem; font-weight:600; color:var(--ink); line-height:1.4; }
+  .detail-card span.small{ display:block; font-size:.85rem; font-weight:500; color:#6b7f85; margin-top:.3rem; }
+
+  .theme-note{
+    margin-top:2.5rem;
+    text-align:center;
+    background:linear-gradient(120deg, rgba(255,111,89,.08), rgba(244,185,66,.15));
+    border:1px dashed var(--gold);
+    border-radius:18px;
+    padding:1.6rem;
+    font-size:.98rem;
+    color:var(--ocean-deep);
+  }
+  .theme-note strong{ color:var(--coral); }
+
+  /* ---------- RSVP FORM ---------- */
+  .rsvp-wrap{ background:var(--ocean-deep); border-radius:28px; padding:2.8rem 1.6rem; color:var(--sand); }
+  .rsvp-wrap .section-title{ color:var(--sand); }
+  .rsvp-wrap .section-label{ color:var(--gold); }
+
+  form{ display:flex; flex-direction:column; gap:1.4rem; max-width:640px; margin:0 auto; }
+  .field{ display:flex; flex-direction:column; gap:.4rem; }
+  label{ font-size:.85rem; font-weight:700; letter-spacing:.03em; }
+  input[type=text], input[type=email], input[type=number], textarea, select{
+    font-family:'Manrope', sans-serif;
+    background:rgba(253,246,236,.08);
+    border:1px solid rgba(253,246,236,.3);
+    border-radius:10px;
+    padding:.8rem 1rem;
+    color:var(--sand);
+    font-size:1rem;
+  }
+  input::placeholder, textarea::placeholder{ color:rgba(253,246,236,.55); }
+  input:focus, textarea:focus, select:focus{
+    outline:2px solid var(--gold);
+    outline-offset:1px;
+  }
+
+  fieldset{ border:none; }
+  legend{ font-size:.85rem; font-weight:700; letter-spacing:.03em; margin-bottom:.7rem; padding:0; }
+  .attend-options{ display:flex; gap:.8rem; flex-wrap:wrap; }
+  .radio-card{
+    flex:1 1 140px;
+    position:relative;
+  }
+  .radio-card input{ position:absolute; opacity:0; inset:0; cursor:pointer; }
+  .radio-card .box{
+    display:block;
+    text-align:center;
+    border:1px solid rgba(253,246,236,.35);
+    border-radius:12px;
+    padding:.9rem .6rem;
+    font-weight:700;
+    font-size:.92rem;
+    transition:.15s;
+    cursor:pointer;
+  }
+  .radio-card input:checked + .box{
+    background:var(--coral);
+    border-color:var(--coral);
+    color:#fff;
+  }
+  .radio-card input:focus-visible + .box{ outline:2px solid var(--gold); outline-offset:2px; }
+
+  .menu-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:.8rem;
+  }
+  .menu-card{ position:relative; }
+  .menu-card input{ position:absolute; opacity:0; inset:0; cursor:pointer; }
+  .menu-card .box{
+    display:flex; flex-direction:column; gap:.2rem;
+    border:1px solid rgba(253,246,236,.3);
+    border-radius:14px;
+    padding:1rem 1.1rem;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .menu-card .box .name{ font-weight:700; font-size:.95rem; }
+  .menu-card .box .desc{ font-size:.82rem; color:rgba(253,246,236,.7); }
+  .menu-card input:checked + .box{
+    background:rgba(244,185,66,.15);
+    border-color:var(--gold);
+  }
+  .menu-card input:checked + .box .name{ color:var(--gold); }
+  .menu-card input:focus-visible + .box{ outline:2px solid var(--gold); outline-offset:2px; }
+
+  #menuSection{ display:none; }
+  #menuSection.show{ display:block; }
+
+  .submit-btn{
+    margin-top:.6rem;
+    background:var(--gold);
+    color:var(--ocean-deep);
+    border:none;
+    border-radius:100px;
+    padding:1rem 1.8rem;
+    font-family:'Manrope', sans-serif;
+    font-weight:800;
+    font-size:1rem;
+    letter-spacing:.02em;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .submit-btn:hover{ background:#fff; }
+  .submit-btn:focus-visible{ outline:2px solid var(--sand); outline-offset:2px; }
+  .hint{ font-size:.78rem; color:rgba(253,246,236,.65); text-align:center; }
+
+  .confirm-msg{
+    display:none;
+    margin-top:1rem;
+    background:rgba(46,139,87,.18);
+    border:1px solid #2E8B57;
+    border-radius:12px;
+    padding:1rem 1.2rem;
+    font-size:.9rem;
+  }
+  .confirm-msg.show{ display:block; }
+
+  footer{
+    text-align:center;
+    padding:3rem 1.5rem 4rem;
+    color:var(--ocean-deep);
+    font-size:.85rem;
+  }
+  footer .display{ font-size:1.3rem; margin-bottom:.4rem; color:var(--coral); }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .hero::before, .cloud, .wave-layer, .palm{ animation:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="clouds" aria-hidden="true">
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+  </div>
+
+  <svg class="palm palm-left" viewBox="0 0 140 200" aria-hidden="true">
+    <path d="M70,200 C68,140 66,90 70,55" stroke="#0C2B33" stroke-width="6" fill="none" opacity=".5"/>
+    <path d="M70,60 C40,40 10,30 -10,15 C25,20 55,32 70,60 Z" fill="#1F5A45"/>
+    <path d="M70,60 C90,30 115,15 140,0 C110,12 85,28 70,60 Z" fill="#1F5A45"/>
+    <path d="M70,55 C50,20 30,-5 5,-25 C40,-12 62,15 70,55 Z" fill="#2C6E5C"/>
+    <path d="M70,55 C95,15 120,-10 150,-25 C112,-14 85,10 70,55 Z" fill="#2C6E5C"/>
+    <path d="M70,55 C68,15 68,-15 75,-40 C80,-12 78,20 70,55 Z" fill="#256052"/>
+  </svg>
+
+  <div class="hero-content">
+    <div class="eyebrow">Celebración especial</div>
+    <div class="big-number">95</div>
+    <h1>Cumpleaños de nuestra Abuela</h1>
+    <p class="hero-sub">Tres días frente al mar para celebrar juntos</p>
+    <div class="hero-meta">
+      <span class="pill">📅 21 – 23 de agosto</span>
+      <span class="pill">📍 Playa Escondida Resort</span>
+      <span class="pill">🌺 Tema: Playa Tropical</span>
+    </div>
+  </div>
+
+  <svg class="palm palm-right" viewBox="0 0 140 200" aria-hidden="true">
+    <path d="M70,200 C68,140 66,90 70,55" stroke="#0C2B33" stroke-width="6" fill="none" opacity=".5"/>
+    <path d="M70,60 C40,40 10,30 -10,15 C25,20 55,32 70,60 Z" fill="#1F5A45"/>
+    <path d="M70,60 C90,30 115,15 140,0 C110,12 85,28 70,60 Z" fill="#1F5A45"/>
+    <path d="M70,55 C50,20 30,-5 5,-25 C40,-12 62,15 70,55 Z" fill="#2C6E5C"/>
+    <path d="M70,55 C95,15 120,-10 150,-25 C112,-14 85,10 70,55 Z" fill="#2C6E5C"/>
+    <path d="M70,55 C68,15 68,-15 75,-40 C80,-12 78,20 70,55 Z" fill="#256052"/>
+  </svg>
+
+  <div class="ocean" aria-hidden="true">
+    <div class="wave-layer wave-back"></div>
+    <div class="wave-layer wave-mid"></div>
+    <div class="wave-layer wave-front"></div>
+  </div>
+</header>
+
+<section id="detalles">
+  <div class="section-label">Los detalles</div>
+  <h2 class="section-title">Qué, cuándo y dónde</h2>
+  <div class="details-grid">
+    <div class="detail-card">
+      <span class="icon">📅</span>
+      <h3>Fechas</h3>
+      <p>21 al 23 de agosto</p>
+      <span class="small">Fin de semana completo</span>
+    </div>
+    <div class="detail-card">
+      <span class="icon">🏖️</span>
+      <h3>Lugar</h3>
+      <p>Playa Escondida Resort</p>
+      <span class="small">Frente al mar</span>
+    </div>
+    <div class="detail-card">
+      <span class="icon">🌴</span>
+      <h3>Tema</h3>
+      <p>Playa · Tropical</p>
+      <span class="small">Colores vivos, sandalias, buena vibra</span>
+    </div>
+  </div>
+  <div class="theme-note">
+    Ven vestido con espíritu <strong>tropical</strong>: colores del atardecer, flores, guayaberas, vestidos frescos.
+    Habrá actividades en la playa, así que trae traje de baño y protector solar.
+  </div>
+</section>
+
+<section id="rsvp">
+  <div class="rsvp-wrap">
+    <div class="section-label">Confirma tu asistencia</div>
+    <h2 class="section-title">RSVP</h2>
+
+    <form id="rsvpForm" action="https://formspree.io/f/mnjejrky" method="POST">
+      <div class="field">
+        <label for="nombre">Nombre completo</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+      </div>
+
+      <div class="field">
+        <label for="correo">Tu correo (opcional, para responderte)</label>
+        <input type="email" id="correo" name="correo" placeholder="tucorreo@ejemplo.com">
+      </div>
+
+      <fieldset>
+        <legend>¿Asistirás?</legend>
+        <div class="attend-options">
+          <label class="radio-card">
+            <input type="radio" name="asistencia" value="Sí, asistiré" required>
+            <span class="box">🙌 Sí, ahí estaré</span>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="asistencia" value="No podré asistir" required>
+            <span class="box">💌 No podré ir</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div id="menuSection">
+        <fieldset>
+          <legend>Selección de menú</legend>
+          <div class="menu-grid">
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Risotto de Hongos y Tartufato">
+              <span class="box"><span class="name">🍄 Risotto de Hongos y Tartufato</span></span>
+            </label>
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Risotto de Pulpo">
+              <span class="box"><span class="name">🐙 Risotto de Pulpo</span></span>
+            </label>
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Tallarines Salteados con Camarones">
+              <span class="box"><span class="name">🍤 Tallarines Salteados con Camarones</span></span>
+            </label>
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Spaghetti alle Vongole Tropical">
+              <span class="box"><span class="name">🍝 Spaghetti alle Vongole Tropical</span></span>
+            </label>
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Tagliatelle Mar & Coco">
+              <span class="box"><span class="name">🥥 Tagliatelle Mar & Coco</span></span>
+            </label>
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Penne all'Arrabbiata">
+              <span class="box"><span class="name">🌶️ Penne all'Arrabbiata</span></span>
+            </label>
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Ravioli de Ricotta y Espinaca">
+              <span class="box"><span class="name">🥟 Ravioli de Ricotta y Espinaca</span></span>
+            </label>
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Hamburguesa La Escondida">
+              <span class="box"><span class="name">🍔 Hamburguesa La Escondida</span></span>
+            </label>
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Filete de Corvina a la Plancha">
+              <span class="box"><span class="name">🐟 Filete de Corvina a la Plancha</span></span>
+            </label>
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Filete de Salmón al Grill">
+              <span class="box"><span class="name">🐟 Filete de Salmón al Grill</span></span>
+            </label>
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Filete de Corvina al Horno">
+              <span class="box"><span class="name">🐟 Filete de Corvina al Horno</span></span>
+            </label>
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Filete Mignon">
+              <span class="box"><span class="name">🥩 Filete Mignon</span></span>
+            </label>
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Entraña a la Parrilla">
+              <span class="box"><span class="name">🥩 Entraña a la Parrilla</span></span>
+            </label>
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Pollo a la Parmigiana Tropical">
+              <span class="box"><span class="name">🍗 Pollo a la Parmigiana Tropical</span></span>
+            </label>
+            <label class="menu-card">
+              <input type="radio" name="menu" value="Ensalada César con Pollo a la Parrilla">
+              <span class="box"><span class="name">🥗 Ensalada César con Pollo a la Parrilla</span></span>
+            </label>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="field">
+        <label for="mensaje">Mensaje para la abuela (opcional)</label>
+        <textarea id="mensaje" name="mensaje" rows="3" placeholder="Escribe unas palabras..."></textarea>
+      </div>
+
+      <input type="hidden" name="_subject" value="">
+      <input type="hidden" name="Resumen" value="">
+
+      <button type="submit" class="submit-btn">Enviar confirmación</button>
+      <p class="hint">Tu confirmación se envía automáticamente a hperez@nelconcargo.com — no necesitas abrir tu correo.</p>
+      <div class="confirm-msg" id="confirmMsg">✅ ¡Confirmación enviada! Gracias por responder.</div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="display">Con cariño, te esperamos</div>
+  <div>21 – 23 de agosto · Playa Escondida Resort</div>
+</footer>
+
+<script>
+  const asistenciaRadios = document.querySelectorAll('input[name="asistencia"]');
+  const menuSection = document.getElementById('menuSection');
+
+  function toggleMenu(){
+    const yes = document.querySelector('input[name="asistencia"]:checked');
+    if(yes && yes.value.startsWith('Sí')){
+      menuSection.classList.add('show');
+    } else {
+      menuSection.classList.remove('show');
+    }
+  }
+  asistenciaRadios.forEach(r => r.addEventListener('change', toggleMenu));
+
+  document.getElementById('rsvpForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const form = e.target;
+    const nombre = document.getElementById('nombre').value.trim();
+    const asistencia = document.querySelector('input[name="asistencia"]:checked');
+    const menu = document.querySelector('input[name="menu"]:checked');
+    const submitBtn = form.querySelector('.submit-btn');
+
+    if(!nombre || !asistencia){
+      alert('Por favor completa tu nombre y confirma si asistirás.');
+      return;
+    }
+
+    const asiste = asistencia.value.startsWith('Sí');
+
+    // Campos ocultos para que el correo llegue claro y organizado
+    form.querySelector('[name="_subject"]').value = `RSVP 95 años — ${nombre}`;
+    form.querySelector('[name="Resumen"]').value =
+      `Asistencia: ${asistencia.value}` +
+      (asiste ? `\nMenú: ${menu ? menu.value : 'No seleccionado'}` : '');
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando...';
+
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    })
+    .then(response => {
+      if(response.ok){
+        document.getElementById('confirmMsg').classList.add('show');
+        form.reset();
+        menuSection.classList.remove('show');
+      } else {
+        alert('No se pudo enviar la confirmación. Por favor intenta de nuevo.');
+      }
+    })
+    .catch(() => {
+      alert('No se pudo enviar la confirmación. Revisa tu conexión e intenta de nuevo.');
+    })
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Enviar confirmación';
+    });
+  });
+</script>
+
+</body>
+</html>
