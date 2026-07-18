@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cena de Cumpleaños — Nella · Rest. Ocho Nudos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Dancing+Script:wght@600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ocean-deep:#073B4C;
+    --ocean-mid:#0F7EA3;
+    --coral:#FF6F59;
+    --gold:#F4B942;
+    --sand:#FDF6EC;
+    --ink:#0C2B33;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Manrope', sans-serif;
+    background:var(--sand);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3, .display{ font-family:'Fraunces', serif; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    overflow:hidden;
+    background: linear-gradient(180deg, var(--ocean-deep) 0%, var(--ocean-mid) 45%, #F2934D 78%, var(--gold) 100%);
+    color:var(--sand);
+    padding:2rem 1.5rem 6rem;
+  }
+  .sun-wrap{ position:absolute; inset:0; z-index:0; pointer-events:none; will-change:transform; }
+  .sun{
+    position:absolute;
+    top:14%;
+    left:50%;
+    transform:translateX(-50%);
+    width:min(58vw,380px);
+    height:min(58vw,380px);
+    border-radius:50%;
+    background: radial-gradient(circle at 40% 35%, #FFE9B0, var(--gold) 55%, #F2934D 78%);
+    box-shadow: 0 0 120px 40px rgba(244,185,66,0.35);
+    opacity:.9;
+    animation: sunPulse 7s ease-in-out infinite;
+  }
+  @keyframes sunPulse{
+    0%,100%{ transform:translateX(-50%) scale(1); box-shadow:0 0 120px 40px rgba(244,185,66,.35); }
+    50%{ transform:translateX(-50%) scale(1.045); box-shadow:0 0 155px 55px rgba(244,185,66,.48); }
+  }
+
+  .clouds{ position:absolute; inset:0; z-index:1; pointer-events:none; overflow:hidden; will-change:transform; }
+  .cloud{ position:absolute; background:rgba(253,246,236,.6); border-radius:100px; filter:blur(.5px); }
+  .cloud::before, .cloud::after{ content:""; position:absolute; background:inherit; border-radius:50%; }
+  .cloud-1{ width:130px; height:38px; top:10%; left:-180px; animation: driftCloud 42s linear infinite; }
+  .cloud-1::before{ width:64px; height:64px; top:-30px; left:16px; }
+  .cloud-1::after{ width:46px; height:46px; top:-18px; left:66px; }
+  .cloud-2{ width:96px; height:28px; top:24%; left:-150px; opacity:.75; animation: driftCloud 58s linear infinite; animation-delay:-20s; }
+  .cloud-2::before{ width:46px; height:46px; top:-20px; left:10px; }
+  .cloud-2::after{ width:34px; height:34px; top:-13px; left:46px; }
+  .cloud-3{ width:74px; height:22px; top:6%; left:-120px; opacity:.65; animation: driftCloud 33s linear infinite; animation-delay:-11s; }
+  .cloud-3::before{ width:36px; height:36px; top:-17px; left:8px; }
+  .cloud-3::after{ width:26px; height:26px; top:-10px; left:36px; }
+  @keyframes driftCloud{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(calc(100vw + 320px)); }
+  }
+
+  .ocean-canvas{
+    position:absolute; left:0; right:0; bottom:-2px; width:100%; height:190px;
+    z-index:1; display:block; cursor:pointer; touch-action:manipulation;
+  }
+  .ocean-hint{
+    position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+    z-index:2; font-size:.72rem; font-weight:700; letter-spacing:.05em;
+    color:var(--ocean-deep); opacity:.6; pointer-events:none;
+    text-transform:uppercase;
+  }
+
+  .palm-wrap{ position:absolute; bottom:0; z-index:2; pointer-events:none; will-change:transform; }
+  .palm-wrap-left{ left:-20px; }
+  .palm-wrap-right{ right:-20px; }
+  .palm{ position:absolute; bottom:-10px; width:140px; height:200px; opacity:.92; transform-origin:bottom center; }
+  .palm-left{ left:0; animation: sway 5.5s ease-in-out infinite; }
+  .palm-right{ right:0; transform:scaleX(-1); animation: swayRight 6.5s ease-in-out infinite; }
+  @keyframes sway{
+    0%,100%{ transform:rotate(-3deg); }
+    50%{ transform:rotate(3deg); }
+  }
+  @keyframes swayRight{
+    0%,100%{ transform:scaleX(-1) rotate(-3deg); }
+    50%{ transform:scaleX(-1) rotate(3deg); }
+  }
+
+  .hero-content{ position:relative; z-index:3; }
+  .eyebrow{
+    letter-spacing:.35em;
+    text-transform:uppercase;
+    font-size:.7rem;
+    font-weight:700;
+    opacity:.85;
+    margin-bottom:1.2rem;
+  }
+  .hero h1{
+    font-size:clamp(1.8rem, 5vw, 2.8rem);
+    font-weight:600;
+    margin-top:.2rem;
+    text-shadow: 0 2px 20px rgba(7,59,76,.4);
+  }
+  .hero-name{
+    display:inline-block;
+    margin-top:.35rem;
+    font-family:'Dancing Script', cursive;
+    font-style:normal;
+    font-weight:700;
+    color:var(--coral);
+    font-size:2.3em;
+    line-height:1.1;
+    text-shadow: 0 0 22px rgba(244,185,66,.65), 0 4px 24px rgba(7,59,76,.5);
+  }
+  .hero-sub{
+    margin-top:1rem;
+    font-size:1.05rem;
+    font-weight:500;
+    opacity:.95;
+  }
+  .hero-meta{
+    margin-top:2.2rem;
+    display:flex;
+    gap:1.2rem;
+    flex-wrap:wrap;
+    justify-content:center;
+    font-size:.9rem;
+    font-weight:600;
+  }
+  .pill{
+    background:rgba(253,246,236,.16);
+    border:1px solid rgba(253,246,236,.4);
+    backdrop-filter:blur(6px);
+    padding:.55rem 1.1rem;
+    border-radius:100px;
+  }
+  .icon-inline{ vertical-align:-2px; margin-right:.15rem; }
+
+  /* ---------- SECTIONS ---------- */
+  section{ padding:5rem 1.5rem; max-width:900px; margin:0 auto; }
+  .section-label{
+    text-transform:uppercase;
+    letter-spacing:.3em;
+    font-size:.72rem;
+    font-weight:700;
+    color:var(--coral);
+    margin-bottom:.7rem;
+    text-align:center;
+  }
+  .section-title{
+    text-align:center;
+    font-size:clamp(1.6rem,4vw,2.3rem);
+    font-weight:600;
+    color:var(--ocean-deep);
+    margin-bottom:2.5rem;
+  }
+
+  .details-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:1.2rem;
+  }
+  .detail-card{
+    background:#fff;
+    border-radius:18px;
+    padding:1.8rem 1.5rem;
+    border:1px solid #EFE3CE;
+    box-shadow:0 10px 30px -18px rgba(7,59,76,.35);
+    text-align:center;
+  }
+  .detail-card .icon{ font-size:1.8rem; margin-bottom:.6rem; display:block; }
+  .detail-card h3{
+    font-size:1rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--coral);
+    margin-bottom:.4rem;
+  }
+  .detail-card p{ font-size:1rem; font-weight:600; color:var(--ink); line-height:1.4; }
+  .detail-card span.small{ display:block; font-size:.85rem; font-weight:500; color:#6b7f85; margin-top:.3rem; }
+
+  .theme-note{
+    margin-top:2.5rem;
+    text-align:center;
+    background:linear-gradient(120deg, rgba(255,111,89,.08), rgba(244,185,66,.15));
+    border:1px dashed var(--gold);
+    border-radius:18px;
+    padding:1.6rem;
+    font-size:.98rem;
+    color:var(--ocean-deep);
+  }
+  .theme-note strong{ color:var(--coral); }
+
+  .phone-note{
+    margin-top:1.2rem;
+    text-align:center;
+    font-size:.95rem;
+    color:var(--ocean-deep);
+  }
+  .phone-note a{ color:var(--coral); font-weight:800; text-decoration:none; }
+  .phone-note a:hover{ text-decoration:underline; }
+
+  /* ---------- RSVP FORM ---------- */
+  .rsvp-wrap{ background:var(--ocean-deep); border-radius:28px; padding:2.8rem 1.6rem; color:var(--sand); }
+  .rsvp-wrap .section-title{ color:var(--sand); }
+  .rsvp-wrap .section-label{ color:var(--gold); }
+
+  form{ display:flex; flex-direction:column; gap:1.4rem; max-width:640px; margin:0 auto; }
+  .field{ display:flex; flex-direction:column; gap:.4rem; }
+  label{ font-size:.85rem; font-weight:700; letter-spacing:.03em; }
+  input[type=text], input[type=email], input[type=tel], textarea{
+    font-family:'Manrope', sans-serif;
+    background:rgba(253,246,236,.08);
+    border:1px solid rgba(253,246,236,.3);
+    border-radius:10px;
+    padding:.8rem 1rem;
+    color:var(--sand);
+    font-size:1rem;
+  }
+  input::placeholder, textarea::placeholder{ color:rgba(253,246,236,.55); }
+  input:focus, textarea:focus{
+    outline:2px solid var(--gold);
+    outline-offset:1px;
+  }
+
+  fieldset{ border:none; }
+  legend{ font-size:.85rem; font-weight:700; letter-spacing:.03em; margin-bottom:.7rem; padding:0; }
+  .attend-options{ display:flex; gap:.8rem; flex-wrap:wrap; }
+  .radio-card{ flex:1 1 140px; position:relative; }
+  .radio-card input{ position:absolute; opacity:0; inset:0; cursor:pointer; }
+  .radio-card .box{
+    display:block;
+    text-align:center;
+    border:1px solid rgba(253,246,236,.35);
+    border-radius:12px;
+    padding:.9rem .6rem;
+    font-weight:700;
+    font-size:.92rem;
+    transition:.15s;
+    cursor:pointer;
+  }
+  .radio-card input:checked + .box{
+    background:var(--coral);
+    border-color:var(--coral);
+    color:#fff;
+  }
+  .radio-card input:focus-visible + .box{ outline:2px solid var(--gold); outline-offset:2px; }
+
+  .menu-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:.8rem;
+  }
+  .menu-card{ position:relative; }
+  .menu-card input{ position:absolute; opacity:0; inset:0; cursor:pointer; }
+  .menu-card .box{
+    display:flex; flex-direction:column; gap:.2rem;
+    border:1px solid rgba(253,246,236,.3);
+    border-radius:14px;
+    padding:1rem 1.1rem;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .menu-card .box .name{ font-weight:700; font-size:.95rem; }
+  .menu-card input:checked + .box{
+    background:rgba(244,185,66,.15);
+    border-color:var(--gold);
+  }
+  .menu-card input:checked + .box .name{ color:var(--gold); }
+  .menu-card input:focus-visible + .box{ outline:2px solid var(--gold); outline-offset:2px; }
+
+  #menuSection{ display:none; }
+  #menuSection.show{ display:block; }
+
+  .submit-btn{
+    margin-top:.6rem;
+    background:var(--gold);
+    color:var(--ocean-deep);
+    border:none;
+    border-radius:100px;
+    padding:1rem 1.8rem;
+    font-family:'Manrope', sans-serif;
+    font-weight:800;
+    font-size:1rem;
+    letter-spacing:.02em;
+    cursor:pointer;
+    transition:.15s;
+  }
+  .submit-btn:hover{ background:#fff; }
+  .submit-btn:focus-visible{ outline:2px solid var(--sand); outline-offset:2px; }
+  .hint{ font-size:.78rem; color:rgba(253,246,236,.65); text-align:center; }
+
+  .confirm-msg{
+    display:none;
+    margin-top:1rem;
+    background:rgba(46,139,87,.18);
+    border:1px solid #2E8B57;
+    border-radius:12px;
+    padding:1rem 1.2rem;
+    font-size:.9rem;
+  }
+  .confirm-msg.show{ display:block; }
+
+  footer{
+    text-align:center;
+    padding:3rem 1.5rem 4rem;
+    color:var(--ocean-deep);
+    font-size:.85rem;
+  }
+  footer .display{ font-size:1.3rem; margin-bottom:.4rem; color:var(--coral); }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .sun, .cloud, .palm{ animation:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero" id="heroBeach">
+  <div class="sun-wrap" id="sunWrap"><div class="sun"></div></div>
+
+  <div class="clouds" id="cloudsWrap" aria-hidden="true">
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+  </div>
+
+  <div class="palm-wrap palm-wrap-left" id="palmWrapLeft">
+    <svg class="palm palm-left" viewBox="0 0 140 200" aria-hidden="true">
+      <path d="M70,200 C68,140 66,90 70,55" stroke="#0C2B33" stroke-width="6" fill="none" opacity=".5"/>
+      <path d="M70,60 C40,40 10,30 -10,15 C25,20 55,32 70,60 Z" fill="#1F5A45"/>
+      <path d="M70,60 C90,30 115,15 140,0 C110,12 85,28 70,60 Z" fill="#1F5A45"/>
+      <path d="M70,55 C50,20 30,-5 5,-25 C40,-12 62,15 70,55 Z" fill="#2C6E5C"/>
+      <path d="M70,55 C95,15 120,-10 150,-25 C112,-14 85,10 70,55 Z" fill="#2C6E5C"/>
+      <path d="M70,55 C68,15 68,-15 75,-40 C80,-12 78,20 70,55 Z" fill="#256052"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="eyebrow">Cena de cumpleaños</div>
+    <h1>Celebrando a<br><span class="hero-name">Nella!</span></h1>
+    <p class="hero-sub">Una noche especial frente al mar</p>
+    <div class="hero-meta">
+      <span class="pill"><svg class="icon-inline" viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="3" fill="#FDF6EC" stroke="#0F7EA3" stroke-width="1.3"/><path d="M3.7 9 H20.3" stroke="#0F7EA3" stroke-width="1.3"/><rect x="3" y="4" width="18" height="4.4" rx="3" fill="#FF6F59"/><rect x="3" y="6.3" width="18" height="2.1" fill="#FF6F59"/><rect x="6.9" y="1.4" width="2.2" height="5" rx="1.1" fill="#F4B942"/><rect x="14.9" y="1.4" width="2.2" height="5" rx="1.1" fill="#F4B942"/></svg> Sábado 22 de agosto</span>
+      <span class="pill">🕢 7:30 p.m.</span>
+      <span class="pill">📍 Rest. Ocho Nudos</span>
+    </div>
+  </div>
+
+  <div class="palm-wrap palm-wrap-right" id="palmWrapRight">
+    <svg class="palm palm-right" viewBox="0 0 140 200" aria-hidden="true">
+      <path d="M70,200 C68,140 66,90 70,55" stroke="#0C2B33" stroke-width="6" fill="none" opacity=".5"/>
+      <path d="M70,60 C40,40 10,30 -10,15 C25,20 55,32 70,60 Z" fill="#1F5A45"/>
+      <path d="M70,60 C90,30 115,15 140,0 C110,12 85,28 70,60 Z" fill="#1F5A45"/>
+      <path d="M70,55 C50,20 30,-5 5,-25 C40,-12 62,15 70,55 Z" fill="#2C6E5C"/>
+      <path d="M70,55 C95,15 120,-10 150,-25 C112,-14 85,10 70,55 Z" fill="#2C6E5C"/>
+      <path d="M70,55 C68,15 68,-15 75,-40 C80,-12 78,20 70,55 Z" fill="#256052"/>
+    </svg>
+  </div>
+
+  <canvas class="ocean-canvas" id="oceanCanvas" aria-hidden="true"></canvas>
+  <div class="ocean-hint">Toca el agua ✨</div>
+</header>
+
+<section id="detalles">
+  <div class="section-label">Los detalles</div>
+  <h2 class="section-title">Qué, cuándo y dónde</h2>
+  <div class="details-grid">
+    <div class="detail-card">
+      <span class="icon"><svg class="icon-svg" viewBox="0 0 24 24" width="1.8rem" height="1.8rem" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="3" fill="#FDF6EC" stroke="#0F7EA3" stroke-width="1.2"/><path d="M3.7 9 H20.3" stroke="#0F7EA3" stroke-width="1.2"/><rect x="3" y="4" width="18" height="4.4" rx="3" fill="#FF6F59"/><rect x="3" y="6.3" width="18" height="2.1" fill="#FF6F59"/><rect x="6.9" y="1.4" width="2.2" height="5" rx="1.1" fill="#F4B942"/><rect x="14.9" y="1.4" width="2.2" height="5" rx="1.1" fill="#F4B942"/></svg></span>
+      <h3>Fecha</h3>
+      <p>Sábado 22 de agosto</p>
+    </div>
+    <div class="detail-card">
+      <span class="icon">🕢</span>
+      <h3>Hora</h3>
+      <p>7:30 p.m.</p>
+    </div>
+    <div class="detail-card">
+      <span class="icon">🍽️</span>
+      <h3>Lugar</h3>
+      <p>Rest. Ocho Nudos</p>
+      <span class="small">Playa Escondida Resort</span>
+    </div>
+    <div class="detail-card">
+      <span class="icon">🌴</span>
+      <h3>Tema</h3>
+      <p>Tropical</p>
+    </div>
+  </div>
+  <div class="theme-note">
+    Tema de vestimenta <strong>tropical</strong>: colores vivos, guayaberas, vestidos frescos — la vibra de la playa en una noche de celebración.
+  </div>
+  <p class="phone-note">¿Prefieres confirmar por teléfono? Escríbenos o llámanos al <a href="tel:+5076672-9813">6672-9813</a></p>
+</section>
+
+<section id="rsvp">
+  <div class="rsvp-wrap">
+    <div class="section-label">Confirma tu asistencia</div>
+    <h2 class="section-title">RSVP</h2>
+
+    <form id="rsvpForm" action="https://formspree.io/f/mnjejrky" method="POST">
+      <div class="field">
+        <label for="nombre">Nombre completo</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+      </div>
+
+      <div class="field">
+        <label for="telefono">Tu teléfono (opcional)</label>
+        <input type="tel" id="telefono" name="telefono" placeholder="6672-9813">
+      </div>
+
+      <fieldset>
+        <legend>¿Asistirás?</legend>
+        <div class="attend-options">
+          <label class="radio-card">
+            <input type="radio" name="asistencia" value="Sí, asistiré" required>
+            <span class="box">🙌 Sí, ahí estaré</span>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="asistencia" value="No podré asistir" required>
+            <span class="box">💌 No podré ir</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div id="menuSection">
+        <fieldset>
+          <legend>Elige tu plato</legend>
+          <div class="menu-grid">
+            <label class="menu-card"><input type="radio" name="menu" value="Risotto de Hongos y Tartufato"><span class="box"><span class="name">🍄 Risotto de Hongos y Tartufato</span></span></label>
+            <label class="menu-card"><input type="radio" name="menu" value="Risotto de Pulpo"><span class="box"><span class="name">🐙 Risotto de Pulpo</span></span></label>
+            <label class="menu-card"><input type="radio" name="menu" value="Tallarines Salteados con Camarones"><span class="box"><span class="name">🍤 Tallarines Salteados con Camarones</span></span></label>
+            <label class="menu-card"><input type="radio" name="menu" value="Spaghetti alle Vongole Tropical"><span class="box"><span class="name">🍝 Spaghetti alle Vongole Tropical</span></span></label>
+            <label class="menu-card"><input type="radio" name="menu" value="Tagliatelle Mar & Coco"><span class="box"><span class="name">🥥 Tagliatelle Mar & Coco</span></span></label>
+            <label class="menu-card"><input type="radio" name="menu" value="Penne all'Arrabbiata"><span class="box"><span class="name">🌶️ Penne all'Arrabbiata</span></span></label>
+            <label class="menu-card"><input type="radio" name="menu" value="Ravioli de Ricotta y Espinaca"><span class="box"><span class="name">🥟 Ravioli de Ricotta y Espinaca</span></span></label>
+            <label class="menu-card"><input type="radio" name="menu" value="Hamburguesa La Escondida"><span class="box"><span class="name">🍔 Hamburguesa La Escondida</span></span></label>
+            <label class="menu-card"><input type="radio" name="menu" value="Filete de Corvina a la Plancha"><span class="box"><span class="name">🐟 Filete de Corvina a la Plancha</span></span></label>
+            <label class="menu-card"><input type="radio" name="menu" value="Filete de Salmón al Grill"><span class="box"><span class="name">🐟 Filete de Salmón al Grill</span></span></label>
+            <label class="menu-card"><input type="radio" name="menu" value="Filete de Corvina al Horno"><span class="box"><span class="name">🐟 Filete de Corvina al Horno</span></span></label>
+            <label class="menu-card"><input type="radio" name="menu" value="Filete Mignon"><span class="box"><span class="name">🥩 Filete Mignon</span></span></label>
+            <label class="menu-card"><input type="radio" name="menu" value="Entraña a la Parrilla"><span class="box"><span class="name">🥩 Entraña a la Parrilla</span></span></label>
+            <label class="menu-card"><input type="radio" name="menu" value="Pollo a la Parmigiana Tropical"><span class="box"><span class="name">🍗 Pollo a la Parmigiana Tropical</span></span></label>
+            <label class="menu-card"><input type="radio" name="menu" value="Ensalada César con Pollo a la Parrilla"><span class="box"><span class="name">🥗 Ensalada César con Pollo a la Parrilla</span></span></label>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="field">
+        <label for="mensaje">Mensaje para Nella (opcional)</label>
+        <textarea id="mensaje" name="mensaje" rows="3" placeholder="Escribe unas palabras..."></textarea>
+      </div>
+
+      <input type="hidden" name="_subject" value="">
+      <input type="hidden" name="Resumen" value="">
+
+      <button type="submit" class="submit-btn">Enviar confirmación</button>
+      <p class="hint">Tu confirmación se envía automáticamente — o si prefieres, escribe al 6672-9813 por WhatsApp.</p>
+      <div class="confirm-msg" id="confirmMsg">✅ ¡Confirmación enviada! Gracias por responder.</div>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="display">Con cariño, te esperamos</div>
+  <div>Sábado 22 de agosto · 7:30 p.m. · Rest. Ocho Nudos, Playa Escondida Resort</div>
+</footer>
+
+<script>
+  /* ---------- Escena de playa interactiva ---------- */
+  (function(){
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hero = document.getElementById('heroBeach');
+    const sunWrap = document.getElementById('sunWrap');
+    const cloudsWrap = document.getElementById('cloudsWrap');
+    const palmL = document.getElementById('palmWrapLeft');
+    const palmR = document.getElementById('palmWrapRight');
+    const canvas = document.getElementById('oceanCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let targetX = 0, targetY = 0, curX = 0, curY = 0;
+    function setTarget(clientX, clientY){
+      const r = hero.getBoundingClientRect();
+      targetX = ((clientX - r.left) / r.width - 0.5) * 2;
+      targetY = ((clientY - r.top) / r.height - 0.5) * 2;
+    }
+    hero.addEventListener('mousemove', e => setTarget(e.clientX, e.clientY));
+    hero.addEventListener('touchmove', e => {
+      if(e.touches[0]) setTarget(e.touches[0].clientX, e.touches[0].clientY);
+    }, {passive:true});
+    hero.addEventListener('mouseleave', () => { targetX = 0; targetY = 0; });
+
+    function applyParallax(){
+      curX += (targetX - curX) * 0.06;
+      curY += (targetY - curY) * 0.06;
+      sunWrap.style.transform    = `translate(${curX*10}px, ${curY*6}px)`;
+      cloudsWrap.style.transform = `translate(${curX*22}px, ${curY*10}px)`;
+      palmL.style.transform      = `translate(${curX*-14}px, ${curY*-6}px) rotate(${curX*-1.2}deg)`;
+      palmR.style.transform      = `translate(${curX*-14}px, ${curY*-6}px) rotate(${curX*1.2}deg)`;
+    }
+
+    let W, H, DPR = Math.min(window.devicePixelRatio || 1, 2);
+    function resize(){
+      const r = canvas.getBoundingClientRect();
+      W = r.width; H = r.height;
+      canvas.width = W * DPR; canvas.height = H * DPR;
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const sparkles = Array.from({length:26}, () => ({
+      x: Math.random(), y: 0.25 + Math.random()*0.55, phase: Math.random()*Math.PI*2, speed: 0.6+Math.random()*1.2
+    }));
+    let ripples = [];
+
+    function addRipple(x, y){
+      ripples.push({x, y, r:2, alpha:0.55});
+      if(ripples.length > 10) ripples.shift();
+    }
+    canvas.addEventListener('click', e => {
+      const r = canvas.getBoundingClientRect();
+      addRipple(e.clientX - r.left, e.clientY - r.top);
+    });
+    canvas.addEventListener('touchstart', e => {
+      const r = canvas.getBoundingClientRect();
+      const t = e.touches[0];
+      if(t) addRipple(t.clientX - r.left, t.clientY - r.top);
+    }, {passive:true});
+
+    function waveY(x, t, amp, freq, speed, offset){
+      return offset + Math.sin(x*freq + t*speed) * amp;
+    }
+
+    function drawLayer(t, baseY, amp, freq, speed, color, alpha){
+      ctx.beginPath();
+      ctx.moveTo(0, H);
+      for(let x = 0; x <= W; x += 6){
+        ctx.lineTo(x, waveY(x, t, amp, freq, speed, baseY));
+      }
+      ctx.lineTo(W, H);
+      ctx.closePath();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    let start = performance.now();
+    function frame(now){
+      const t = (now - start) / 1000;
+      ctx.clearRect(0,0,W,H);
+
+      drawLayer(t, H*0.28, 8, 0.018, 1.1, '#F4B942', 0.28);
+      drawLayer(t, H*0.42, 10, 0.024, -1.5, '#FDF6EC', 0.5);
+      drawLayer(t, H*0.62, 12, 0.02, 1.8, '#FDF6EC', 1);
+
+      sparkles.forEach(s => {
+        const x = s.x * W;
+        const y = waveY(x, t, 10, 0.024, -1.5, H*0.42) - 6 + Math.sin(t*s.speed + s.phase) * 4;
+        const tw = (Math.sin(t*s.speed*2 + s.phase) + 1) / 2;
+        if(y < H*0.6){
+          ctx.globalAlpha = 0.15 + tw*0.35;
+          ctx.fillStyle = '#FFF6DE';
+          ctx.beginPath();
+          ctx.arc(x, y, 1.4 + tw*1.6, 0, Math.PI*2);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+      });
+
+      ripples.forEach(rp => {
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(7,59,76,${rp.alpha})`;
+        ctx.lineWidth = 2;
+        ctx.arc(rp.x, rp.y, rp.r, 0, Math.PI*2);
+        ctx.stroke();
+        rp.r += 2.6;
+        rp.alpha *= 0.94;
+      });
+      ripples = ripples.filter(rp => rp.alpha > 0.03);
+
+      applyParallax();
+
+      if(!reduceMotion) requestAnimationFrame(frame);
+    }
+
+    if(reduceMotion){
+      frame(performance.now());
+    } else {
+      requestAnimationFrame(frame);
+    }
+  })();
+</script>
+
+<script>
+  const asistenciaRadios = document.querySelectorAll('input[name="asistencia"]');
+  const menuSection = document.getElementById('menuSection');
+
+  function toggleMenu(){
+    const yes = document.querySelector('input[name="asistencia"]:checked');
+    if(yes && yes.value.startsWith('Sí')){
+      menuSection.classList.add('show');
+    } else {
+      menuSection.classList.remove('show');
+    }
+  }
+  asistenciaRadios.forEach(r => r.addEventListener('change', toggleMenu));
+
+  document.getElementById('rsvpForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const form = e.target;
+    const nombre = document.getElementById('nombre').value.trim();
+    const asistencia = document.querySelector('input[name="asistencia"]:checked');
+    const menu = document.querySelector('input[name="menu"]:checked');
+    const submitBtn = form.querySelector('.submit-btn');
+
+    if(!nombre || !asistencia){
+      alert('Por favor completa tu nombre y confirma si asistirás.');
+      return;
+    }
+
+    const asiste = asistencia.value.startsWith('Sí');
+
+    form.querySelector('[name="_subject"]').value = `RSVP Cena Nella — ${nombre}`;
+    form.querySelector('[name="Resumen"]').value =
+      `Evento: Cena de Cumpleaños de Nella (22 de agosto, Rest. Ocho Nudos)\n` +
+      `Asistencia: ${asistencia.value}` +
+      (asiste ? `\nMenú: ${menu ? menu.value : 'No seleccionado'}` : '');
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando...';
+
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    })
+    .then(response => {
+      if(response.ok){
+        document.getElementById('confirmMsg').classList.add('show');
+        form.reset();
+        menuSection.classList.remove('show');
+      } else {
+        alert('No se pudo enviar la confirmación. Por favor intenta de nuevo, o escribe al 6672-9813.');
+      }
+    })
+    .catch(() => {
+      alert('No se pudo enviar la confirmación. Revisa tu conexión, o escribe al 6672-9813.');
+    })
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Enviar confirmación';
+    });
+  });
+</script>
+
+</body>
+</html>
